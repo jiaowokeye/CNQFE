@@ -1,0 +1,35 @@
+.select_from_tree_container {
+  align-items: flex-start;
+  margin-top: 10px;
+  .select_from_tree_container_left{
+    flex:1;
+    .left_tree{
+      width: auto;
+      padding-right: 20px;
+      .ant-input-search{
+        width:100%!important;
+      }
+    }
+  }
+  .select_from_tree_container_left.none{
+    .left_tree{
+      border-right: 0;
+    }
+  }
+  .select_from_tree_container_right{
+    flex:1;
+  }
+}
+
+.select_from_tree_container_right {
+  margin-left: 10px;
+
+  .select_search_box {
+    width: 440px;
+    margin-bottom: 20px;
+
+    .ant-input-affix-wrapper {
+      width: 220px;
+    }
+  }
+}

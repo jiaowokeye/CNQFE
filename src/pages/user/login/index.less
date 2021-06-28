@@ -1,0 +1,218 @@
+@Color:#465FFD;
+
+.logins {
+  .login_mask {
+    height: 100%;
+    position: relative;
+  }
+  
+  background: url('./login_bg.png') no-repeat center;
+  background-size: cover;
+  height: 100%;
+  padding:0;
+}
+
+.login_title {
+  margin-right: 14%;
+  div{
+    font-size: 22px;
+    font-weight: 500;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    img{
+      width: 28px;
+      height: 24px;
+      margin-right: 6px;
+    }
+  }
+  p {
+    font-size: 48px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 0;
+  }
+  .pbottom{
+    margin-bottom: 40px;
+  } 
+  span {
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+  }
+  .bottomSpan{
+    margin-bottom: 60px;
+    display: inline-block;
+    font-size: 15px;
+  }
+}
+
+.login_container {
+  background: #ffffff;
+  border-radius: 4px;
+  width: 400px;
+  height: 416px;
+  position: relative;
+  .code_login {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(48, 48, 48, 1);
+    text-align: center;
+    user-select: none;
+  }
+  .change_login_type {
+    position: absolute;
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+  }
+
+  .login_phone {
+    .select_login_type {
+      width: 240px;
+
+      span {
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(48, 48, 48, 1);
+        position: relative;
+        transition: all .2s ease;
+        user-select: none;
+
+        &::after {
+          transition: .4s ease;
+          position: absolute;
+          content: '';
+          width: 100%;
+          height: 2px;
+          background: transparent;
+          left: 0;
+          bottom: -6px;
+        }
+      }
+
+      span:hover {
+        cursor: pointer;
+      }
+
+      span.selected {
+        color: @Color;
+
+        &::after {
+          background: @Color;
+        }
+      }
+    }
+
+    .input_msg {
+      width: 240px;
+
+      input {
+        margin-top: 30px;
+        height: 40px;
+      }
+
+      .check_num {
+        position: relative;
+        margin-top: 30px;
+
+        input {
+          margin: 0;
+        }
+
+        .get_check_num {
+          user-select: none;
+          position: absolute;
+          right: 10px;
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(200, 200, 200, 1);
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .can_click {
+          cursor: pointer;
+          color: rgba(170, 0, 5, 1);
+        }
+      }
+    }
+
+    .auto_login {
+      margin-top: 30px;
+
+      .ant-checkbox-wrapper {
+        transform: scale(.8) translateX(-16px);
+      }
+
+      .auto_login_text {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(148, 148, 148, 1);
+      }
+
+      .forgot_password {
+        transform: scale(.8);
+        font-size: 12px;
+        font-weight: 400;
+        color: @Color;
+      }
+    }
+
+    .login_btn {
+      width: 240px;
+      height: 40px!important;
+      line-height: 40px!important;
+      background: @Color;
+      color: #ffffff!important;
+      margin-top: 30px;
+      border-color: @Color!important;
+    }
+    .login_btn:hover{
+      background: #465FFD!important;
+    }
+  }
+
+  .login_right_qrcode {
+    .wechat_login {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(48, 48, 48, 1);
+      text-align: center;
+      user-select: none;
+    }
+
+    .qr_code {
+      padding: 10px;
+      margin-top: 20px;
+      // background: rgba(0, 0, 0, .1);
+      img {
+        width: 180px;
+      }
+      iframe{
+        height: 250px;
+      }
+    }
+  }
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: @Color;
+  border-color: @Color;
+}
+
+.ant-btn:hover {
+  border-color: transparent;
+}
+.impowerBox .title{
+  overflow: hidden;
+}

@@ -1,0 +1,16 @@
+#/bin/sh
+
+export PATH=$PATH:/opt/soft/node/node-v12.8.0-linux-x64/bin
+cd /var/lib/jenkins/workspace/PsyAsse-FE
+yarn
+yarn build
+# 这里需要写一个  如果/home/xuliang/html存在 deepred/ 删除旧的项目文件
+
+if [ -d "/data/app/emeast/web" ];then
+	if [ -d "/data/app/emeast/web/PsyAsse-FE~" ]; then
+		DATE=$(date +"%Y%m%d%H%M%S")
+		mv -f /data/app/emeast/web/PsyAsse-FE~ /data/app/emeast/web/PsyAsse-FE_bak_$DATE	
+	fi
+	mv -bf ./dist /data/app/emeast/web/PsyAsse-FE
+	nginx -s reload
+fi

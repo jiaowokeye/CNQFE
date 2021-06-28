@@ -1,0 +1,68 @@
+.bitmap {
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 360px;
+
+  .news_img {
+    height: 360px;
+    background-size: cover;
+    display: block;
+    position: relative;
+  }
+
+  .news_desc {
+    position: absolute;
+    bottom: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, .5);
+    left: 0;
+    right: 0;
+    padding-right: 100px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    line-height: 50px;
+    padding-left: 20px;
+    z-index: 10;
+  }
+}
+
+.ant-carousel {
+  overflow: hidden;
+
+  .slick-slide>div {
+    height: 360px;
+  }
+
+  .slick-dots {
+    bottom: 22px;
+    right: 20px;
+    width: auto;
+    z-index: 20;
+
+    li {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .3);
+
+      button {
+        border-radius: 50%;
+        width: inherit;
+        height: inherit;
+        opacity: 0 !important;
+      }
+    }
+
+    .slick-active {
+      width: 6px;
+      background: #ffffff;
+    }
+  }
+}
