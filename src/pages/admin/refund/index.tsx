@@ -101,16 +101,15 @@ class DataPage extends React.Component {
   }
   render() {
     let btns = [
-      {
-        label: '导出退款结果',
-        props: {
-          className: 'success_btn',
-          onClick: () => { 
-            console.log('123');
-            container.refs.editUser.init();
-          }
-        }
-      }
+      // {
+      //   label: '导出退款结果',
+      //   props: {
+      //     className: 'success_btn',
+      //     onClick: () => { 
+           
+      //     }
+      //   }
+      // }
     ];
     return <div>
       <div className="module-title">

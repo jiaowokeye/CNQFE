@@ -228,18 +228,14 @@ class EditUser extends React.Component{
       onCancel={this.handleCancel}>
         <Form {...formItemLayout}>
             <Form.Item label="头像">
-              <Upload
-                name="file"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="mini/mss/annex/upload"
-                onChange={(info)=>{
-                  console.log(info);
-                }}
-              >
-                {this.state.avatar ? <img src={this.state.avatar} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-              </Upload>
+              
+              <UploadS renderHtml={
+                this.state.avatar ? <img src={this.state.avatar} alt="avatar" style={{ width: '100%' }} /> : uploadButton
+              } callback={(data)=>{
+                this.setState({ 
+                  avatar:data
+                })
+              }}/>
             </Form.Item>
             <Form.Item label="姓名">
               <Input value={this.state.name} onChange={(e)=>{

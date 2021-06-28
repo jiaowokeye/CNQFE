@@ -63,7 +63,7 @@ const Model: LoginModelType = {
           res = {
             status: 'ok',
             type:'account',
-            currentAuthority: 'user',
+            currentAuthority: 'admin',
           }
         }
         yield put({ 

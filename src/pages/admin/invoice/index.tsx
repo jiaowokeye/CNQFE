@@ -287,7 +287,7 @@ const columns = [
     key: 'name',
   },
   {
-    title: '手机号',
+    title: '金额',
     dataIndex: 'mobile',
     key: 'mobile',
   },
