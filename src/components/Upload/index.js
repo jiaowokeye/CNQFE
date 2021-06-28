@@ -41,7 +41,7 @@ class UploadS extends React.Component{
     console.log(info.data);
     let HOST = '';
     if(process.env.NODE_ENV!=='development'){
-      HOST = 'https://www.chenyoung.cn/ntz/api/v1';
+      HOST = 'https://www.chenyoung.cn/ntz_dev/api/v1';
     }else{
       HOST = '/psy';
     }

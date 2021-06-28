@@ -66,7 +66,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
       >
         <div>
         京ICP备19054936号-2
-        ©2020-2030 北京二麦科技有限公司版权所有
+        ©2020-2030 趁年轻知识产权代理（北京）有限公司
         </div>
         
       </div>

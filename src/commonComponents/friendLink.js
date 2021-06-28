@@ -45,7 +45,7 @@ class FriendLink extends Component {
         <div key='CopyRight' className={`CopyRight between_flex ${className}`}>
           <a href='http://beian.miit.gov.cn/state/outPortal/loginPortal.action;jsessionid=e-hrAzhVBwMj9AiATNu_GbL5A5vKk9O3uKERx74WThdCnLWMXXEo!1958385134'>京ICP备19054936号-2</a>
           {/* <span>中共委组织部版权所有</span> */}
-          <span>北京二麦科技有限公司技术支持</span>
+          <span>趁年轻知识产权代理（北京）有限公司技术支持</span>
         </div>
       ]
     )

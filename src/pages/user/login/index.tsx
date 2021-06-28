@@ -194,7 +194,7 @@ class Login extends Component<LoginProps, LoginState> {
         </div>
         <div className="Copyright">
           <div>
-            Copyright © 2020-2022 北京二麦科技有限公司版权所有 | <a href="https://www.ermaisoft.com/">ermaisoft.com</a> | <a target="_blank" href="http://beian.miit.gov.cn/state/outPortal/loginPortal.action;jsessionid=e-hrAzhVBwMj9AiATNu_GbL5A5vKk9O3uKERx74WThdCnLWMXXEo!1958385134">京ICP备19054936号-3</a>
+            Copyright © 2020-2022 趁年轻知识产权代理（北京）有限公司 | <a href="https://www.ermaisoft.com/">ermaisoft.com</a> | <a target="_blank" href="http://beian.miit.gov.cn/state/outPortal/loginPortal.action;jsessionid=e-hrAzhVBwMj9AiATNu_GbL5A5vKk9O3uKERx74WThdCnLWMXXEo!1958385134">京ICP备19054936号-3</a>
           </div>
         </div>
       </div>

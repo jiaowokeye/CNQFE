@@ -19,7 +19,7 @@ service.interceptors.request.use(config => {
     config.cancelToken = source.token;
     if(process.env.NODE_ENV!=='development'){
         
-        config.url = 'https://www.chenyoung.cn/ntz/api/v1'+(config.url.replace('/psy/','/'));
+        config.url = 'https://www.chenyoung.cn/ntz_dev/api/v1'+(config.url.replace('/psy/','/'));
     }else{
         config.url = pathname+config.url;
     }

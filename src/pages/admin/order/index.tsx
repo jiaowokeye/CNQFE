@@ -17,7 +17,7 @@ let container1: any | null = null;
 let editorState = null;
 let HOST = '';
 if(process.env.NODE_ENV!=='development'){
-  HOST = 'https://www.chenyoung.cn/ntz/api/v1';
+  HOST = 'https://www.chenyoung.cn/ntz_dev/api/v1';
 }else{
   HOST = '/psy';
 }
