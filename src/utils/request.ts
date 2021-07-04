@@ -2,6 +2,7 @@ import qs from "qs";
 import 'es6-promise'
 import axios from 'axios';
 import {notification,message} from 'antd';
+import router from 'umi/router';
 const jsonpAdapter = require('axios-jsonp');
 console.log(process.env);
 const history = require("history").createBrowserHistory();
@@ -38,6 +39,10 @@ service.interceptors.request.use(config => {
 });
 
 service.interceptors.response.use(response => {
+    if(response.headers['content-disposition']){
+        convertRes2Blob(response);
+        return Promise.resolve({})
+    }
     if (response.status >= 200 && response.status < 300) {
         switch (response.data.code) {
             case 1000:
@@ -53,6 +58,16 @@ service.interceptors.response.use(response => {
                     history.push("/user/login");
                 }
                 return Promise.reject({});
+            case 2014:
+                notification.open({
+                    message: response.status,
+                    description: response.data.msg,
+                    onClick: () => {
+                        console.log('Notification Clicked!');
+                    },
+                });
+                return Promise.resolve({});
+                break;
             default:
                 return Promise.resolve(response.data);
         }
@@ -188,7 +203,38 @@ export function All(optionArr:any) {
 //         },500)
 //     })
 // }
+function convertRes2Blob(response) {
+    console.log(123);
+    // 提取文件名
+    let fileName = response.headers['content-disposition'].match(
+      /filename=(.*)/
+    )[1]
+    fileName = decodeURI(fileName)
 
+    const type = response.headers['content-type'];
+    console.log(type)
+    // 将二进制流转为blob
+    const blob = new Blob([response.data], {  type: type })
+    
+    if ('msSaveOrOpenBlob' in navigator) {
+         
+          window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+          
+          var url = window.URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          
+          link.style.display = 'none';
+          link.href = url;
+          link.setAttribute('download', fileName);
+          link.setAttribute('id', 'downLoadFile');
+          console.log(link);
+          window.document.body.appendChild(link);
+         
+          link.click();
+    
+        }
+  }
 
 export {
     pathname

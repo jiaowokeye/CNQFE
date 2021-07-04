@@ -99,17 +99,28 @@ class DataPage extends React.Component {
       this.getList();
     })
   }
+  export = ()=>{
+    Request('/psy/mng/refund/export', {
+      k: this.state.k,
+      offset: this.state.offset * this.state.count,
+      count: this.state.count,
+      online:-1,
+      free:-1
+    }).then((res) => {
+     
+    })
+  }
   render() {
     let btns = [
-      // {
-      //   label: '导出退款结果',
-      //   props: {
-      //     className: 'success_btn',
-      //     onClick: () => { 
-           
-      //     }
-      //   }
-      // }
+      {
+        label: '导出退款结果',
+        props: {
+          className: 'success_btn',
+          onClick: () => { 
+            this.export()
+          }
+        }
+      }
     ];
     return <div>
       <div className="module-title">
@@ -215,7 +226,7 @@ class EditUser extends React.Component{
         <Form {...formItemLayout}>
             
             <Form.Item label="审核意见">
-              <Input value={this.state.message} onChange={(e)=>{
+              <Input.TextArea style={{height:'90px'}} value={this.state.message} onChange={(e)=>{
                 this.setState({
                   message:e.target.value
                 })
@@ -252,6 +263,11 @@ const columns = [
       </div>
     }
   },
+  {
+    title: '退款原因',
+    dataIndex: 'reason',
+    key: 'reason',
+  },
     {
       title: '操作',
       dataIndex: 'scan',
@@ -265,7 +281,7 @@ const columns = [
         }
         return <div>
             {
-              record.state=='审批中'?<span className="link" onClick={()=>container.refs.editUser.init(record.id)}>去审批</span>:<span className="link" style={{color:'#333'}}> {stateObj[record.state]}</span>
+              record.state=='apply'?<span className="link" onClick={()=>container.refs.editUser.init(record.id)}>去审批</span>:<span className="link" style={{color:'#333'}}> {stateObj[record.state]}</span>
             }
            
           

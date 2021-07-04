@@ -24,7 +24,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   state = {
     visible:false,
     pwd:'',
-    npwd:''
+    npwd:'',
+    spwd:''
   }
   louout = ()=>{
     const { dispatch } = this.props;
@@ -38,16 +39,25 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     container = this;
   }
   handleOk = ()=>{
+    if(this.state.spwd!=this.state.npwd){
+      message.error('两次输入的密码不一致');
+      return;
+    }
     Request('/psy/sys/user/changepwd', {
       pwd:this.state.pwd,
       npwd:this.state.npwd
     }).then((res) => {
       this.setState({
-        visible:true,
+        visible:false,
         pwd:'',
-        npwd:''
+        npwd:'',
+        spwd:''
       },()=>{
-        this.louout();
+        message.success('密码修改成功，2秒后跳转登录页面');
+        setTimeout(() => {
+          this.louout();
+        }, 2000);
+       
       })
     })
   }
@@ -78,7 +88,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
             this.setState({
               visible:true,
               pwd:'',
-              npwd:''
+              npwd:'',
+              spwd:''
             })
           }}  style={{fontWeight:'normal'}}>修改密码</span>
         </Menu.Item>
@@ -130,6 +141,13 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                   <Input value={this.state.npwd} onChange={(e)=>{
                     this.setState({
                       npwd:e.target.value
+                    })
+                  }}/>
+                </Form.Item>
+                <Form.Item label="确认密码">
+                  <Input value={this.state.spwd} onChange={(e)=>{
+                    this.setState({
+                      spwd:e.target.value
                     })
                   }}/>
                 </Form.Item>

@@ -51,6 +51,7 @@ class DataPage extends React.Component {
       selling_price:Number(this.state.selling_price) 
     }).then((res:any) => {
       this.getData();
+      message.success('修改成功');
     })
   }
   render() {

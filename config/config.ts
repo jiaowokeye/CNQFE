@@ -102,6 +102,12 @@ export default {
               authority: ['user','admin'],
             },
             {
+              name: '会员卡销售记录',
+              path: '/admin/obligee',
+              authority: ['user','admin'],
+              component: './admin/obligee',
+            },
+            {
               name: '退款管理',
               path: '/admin/refund',
               authority: ['user','admin'],
@@ -113,18 +119,8 @@ export default {
               authority: ['user','admin'],
               component: './admin/invoice',
             },
-            {
-              name: '会员查询',
-              path: '/admin/memberQuery',
-              authority: ['user','admin'],
-              component: './admin/memberQuery',
-            },
-            {
-              name: '权利人查询',
-              path: '/admin/obligee',
-              authority: ['user','admin'],
-              component: './admin/obligee',
-            },
+          
+           
             {
               name: '会员卡管理',
               path: '/admin/memberCard',
@@ -143,6 +139,12 @@ export default {
               authority: ['admin'],
               component: './admin/usersMan',
             },
+            // {
+            //   name: '会员查询',
+            //   path: '/admin/memberQuery',
+            //   authority: ['user','admin'],
+            //   component: './admin/memberQuery',
+            // },
             {
               component: './404',
             },

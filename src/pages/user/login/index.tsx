@@ -70,6 +70,7 @@ class Login extends Component<LoginProps, LoginState> {
       mobile:username,
       pwd:password
     } 
+    console.log(params);
     const { dispatch } = this.props;
     dispatch({
       type: 'login/login',
@@ -174,7 +175,6 @@ class Login extends Component<LoginProps, LoginState> {
             </div> */}
 
             <Button
-              loading={submitting}
               onClick={this.handleSubmit}
               className={styles.login_btn}>
               登录

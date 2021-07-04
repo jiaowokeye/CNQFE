@@ -12,6 +12,7 @@ import styles from './index.less';
 import bgPng from './bgPng.png';
 import RichTextEditor from '@/commonComponents/richText';
 import defaultPng from './d.png';
+import moment from 'moment';
 let container: any | null = null;
 let container1: any | null = null;
 let editorState = null;
@@ -93,7 +94,7 @@ class DataPage extends React.Component {
         total: res.data.total_count
       })
     })
-  }
+  } 
   onSearch = (values)=>{
     console.log(values);
     this.setState({
@@ -104,17 +105,28 @@ class DataPage extends React.Component {
       this.getList();
     })
   }
+  export = ()=>{
+    Request('/psy/mng/bill/export', {
+      k: this.state.k,
+      offset: this.state.offset * this.state.count,
+      count: this.state.count,
+      online:-1,
+      free:-1
+    }).then((res) => {
+     
+    })
+  }
   render() {
     let btns = [
-      // {
-      //   label: '导出结果',
-      //   props: {
-      //     className: 'success_btn',
-      //     onClick: () => { 
-            
-      //     }
-      //   }
-      // }
+      {
+        label: '导出结果',
+        props: {
+          className: 'success_btn',
+          onClick: () => { 
+            this.export()
+          }
+        }
+      }
     ];
     return <div>
       <div className="module-title">
@@ -237,7 +249,7 @@ class EditUser extends React.Component{
         Request('/psy/mng/refund/apply', {
           busi_type:'bill',
           busi_id:_this.state.data.id,
-          reason:''
+          reason:this.state.message
          }).then((res) => {
            _this.setState({
              visible1:false
@@ -269,7 +281,8 @@ class EditUser extends React.Component{
       
         {
            data!==null&&['normal','success'].indexOf(this.state.data['state'])!==-1&& <div className="ant-btn success_btn" onClick={()=>this.setState({
-            visible1:true
+            visible1:true,
+            message:''
           })} style={{marginRight:'15px'}}>退款</div>
         }
       
@@ -385,7 +398,22 @@ class EditUser extends React.Component{
                   }
                 
               </Descriptions.Item>
+              <Descriptions.Item  label='快递'>
+                    <div>{data.express_type==1?'顺丰到付':'普通快递包邮'}</div>
+                    {
+                      data.express_info.express&& <div>
+                          快递单号：{ data.express_info.express['expressNo']}<br />
+                          寄件人：{ data.express_info.express['postMan']}<br />
+                          邮寄时间：{ data.express_info.express['sendTime']}
+                      </div>
+                    }
+                   
+                </Descriptions.Item>
+
+              
             </Descriptions>
+
+
           </div>:<div></div>
         }
 
@@ -1181,6 +1209,40 @@ const columns = [
     key: 'bill_no',
   },
   {
+    title: '权利人信息',
+    dataIndex: 'bill_no',
+    key: 'bill_no',
+    render(str,data){
+      return data['right_holder'].type=='person'?<div>{data['right_holder']['name']}</div>:<div>{data['right_holder']['company']}</div>
+    }
+  },
+  {
+    title: '受让方信息',
+    dataIndex: 'bill_no',
+    key: 'bill_no',
+    render(str,data){
+      return data['assignee']['type']=='person'?data['assignee']['name']:data['assignee']['company']
+    }
+  },
+  {
+    title: '快递',
+    dataIndex: 'pay_time',
+    key: 'pay_time',
+    width:"150px",
+    render(str,data){
+      return data.express_type==1?'顺丰到付':'普通快递包邮'
+    }
+  },
+  {
+    title: '付款时间',
+    dataIndex: 'pay_time',
+    key: 'pay_time',
+    width:"150px",
+    render(str){
+      return str!=0?moment(str).format('YYYY-MM-DD HH:mm:ss'):''
+    }
+  },
+  {
     title: '状态',
     dataIndex: 'state',
     key: 'state',
@@ -1196,7 +1258,6 @@ const columns = [
       return <span>{stateObj[record.state]?stateObj[record.state]:record.state}</span>
     }
   },
-  
     {
       title: '操作',
       dataIndex: 'scan',

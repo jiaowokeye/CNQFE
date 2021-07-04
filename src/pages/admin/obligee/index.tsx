@@ -12,6 +12,7 @@ import styles from './index.less';
 import bgPng from './bgPng.png';
 import RichTextEditor from '@/commonComponents/richText';
 import defaultPng from './d.png';
+import moment from 'moment';
 let container: any | null = null;
 let container1: any | null = null;
 let editorState = null;
@@ -48,6 +49,9 @@ class DataPage extends React.Component {
     k:'',
     top: '',
     visible: true,
+    visible1:false,
+    message:'',
+    refundid:''
   }
   
   onCurrentChange = (offset: number) => {
@@ -74,7 +78,7 @@ class DataPage extends React.Component {
     this.setState({
       loading: true
     })
-    Request('/psy/mng/rightholder/query', {
+    Request('/psy/mng/membercard/query', {
       k: this.state.k,
       offset: this.state.offset * this.state.count,
       count: this.state.count,
@@ -98,6 +102,36 @@ class DataPage extends React.Component {
       this.getList();
     })
   }
+  refundModal = (id)=>{
+    this.setState({
+      visible1:true,
+      message:'',
+      refundid:id
+    })
+  }
+  refund=()=>{
+    let _this = this;
+    Modal.confirm({
+      title: '确认发起退款？',
+      content: '',
+      onOk() {
+        Request('/psy/mng/refund/apply', {
+          busi_type:'card',
+          busi_id:_this.state.refundid,
+          reason:_this.state.message
+         }).then((res) => {
+           _this.setState({
+             visible1:false
+           },()=>{
+             _this.getList();
+           })
+         })
+      },
+      onCancel() {
+        
+      },
+    });
+  }
   render() {
     let btns = [
      
@@ -106,12 +140,12 @@ class DataPage extends React.Component {
       <div className="module-title">
         {this.props.route.name}
       </div>
-      <Forms
+      {/* <Forms
         btns={btns}
         onSearch={this.onSearch}
         list={list}
         reset={this.reset}
-      />
+      /> */}
       <div className="table-box">
        <Table pagination={{
             current: this.state.offset + 1,
@@ -123,6 +157,26 @@ class DataPage extends React.Component {
       </div>
 
       <EditUser ref="editUser" callback={()=>this.getList()}/>
+
+      <Modal title='退款申请'
+        visible={this.state.visible1} 
+        centered
+        bodyStyle={{
+          height:'200px'
+        }}
+        onOk={()=>this.refund()}
+          onCancel={()=>{
+            this.setState({
+              visible1:false,
+              message:''
+            })
+          }}>
+           <Input.TextArea style={{height:'120px'}} value={this.state.message} onChange={(e)=>{
+                this.setState({
+                  message:e.target.value
+                })
+              }}/>
+          </Modal>
     </div>
   }
 }
@@ -272,43 +326,62 @@ class EditUser extends React.Component{
   }
 }
 const columns = [
+  
   {
-    title: '类型',
-    dataIndex: 'type',
-    key: 'type',
+    title: '编号',
+    dataIndex: 'card_no',
+    key: 'card_no',
+  },
+  {
+    title: '购买时间',
+    dataIndex: 'buy_time',
+    key: 'buy_time',
     render(str,record){
-      return <div>
-        {
-          record.type=='company'?'公司':(record.type=='person'?'个人':"香港公司")
-        }
-      </div>
+      return moment(record.buy_time).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   {
-    title: '手机号',
-    dataIndex: 'phone',
-    key: 'phone',
+    title: '到期时间',
+    dataIndex: 'expire',
+    key: 'expire',
+    render(str,record){
+      return moment(record.expire).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+ 
+  {
+    title: '状态',
+    dataIndex: 'pay_state',
+    key: 'pay_state',
   },
   {
-    title: '姓名（个人/董事/法人）',
-    dataIndex: 'name',
-    key: 'name',
+    title: '剩余次数',
+    dataIndex: 'remaining_time',
+    key: 'remaining_time',
   },
   {
-    title: '身份证号（个人/董事/法人）',
-    dataIndex: 'id_number',
-    key: 'id_number',
-  },
-  
-  {
-    title: '邮箱',
-    dataIndex: 'email',
-    key: 'email',
+    title: '开票状态',
+    dataIndex: 'invoice_flag',
+    key: 'invoice_flag',
+    render(str,record){
+      return record.invoice_flag?'已开票':'未开票'
+    }
   },
   {
-    title: '公司名称',
-    dataIndex: 'company',
-    key: 'company',
+    title: '退款状态',
+    dataIndex: 'refund',
+    key: 'refund',
+    render(str,record){
+      return record.refund=='已退款'?'已退款':'未退款'
+    }
+  },
+  {
+    title: '操作',
+    dataIndex: 'scan',
+    key: 'scan',
+    render(str,record){
+      return record.pay_state=='已付款'&&record.refund!='已退款'?<span className="link" onClick={()=>container.refundModal(record.id)}>退款</span>:<span></span>
+    }
   },
   ];
 

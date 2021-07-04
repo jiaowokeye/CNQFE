@@ -16,6 +16,22 @@ if(process.env.NODE_ENV=="development"){
     uploadAPI = uploadAPI + '?ud=23'
 }
 console.log(uploadAPI);
+
+function getBase64(file) {
+  if(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }else{
+    return new Promise((resolve, reject) => {
+      resolve('');
+    });
+  }
+ 
+}
 class UploadS extends React.Component{
 
   state = {
@@ -36,26 +52,29 @@ class UploadS extends React.Component{
     }
   } 
  
-  handleChange = (info)=>{
-    console.log(info);
-    console.log(info.data);
-    let HOST = '';
-    if(process.env.NODE_ENV!=='development'){
-      HOST = 'https://www.chenyoung.cn/ntz_dev/api/v1';
-    }else{
-      HOST = '/psy';
-    }
-    this.props.callback&&this.props.callback(HOST+info.data);
+  customRequest = async (option)=>{
+    const formData = new FormData();
+    formData.append("files[]", option.file);
+    const reader = new FileReader();
+    reader.readAsDataURL(option.file);
+    reader.onloadend = (e)=> {
+      console.log(e.target.result);// 打印图片的base64
+      this.props.callback&&this.props.callback(e.target.result);
+      if (e && e.target && e.target.result) {
+        option.onSuccess();
+      }
+    };
+
   } 
   render () {
     const { renderHtml,fileList } = this.state;
    
     return (
       <div className='upload_box'>
-        <Upload action="/psy/common/file/upload"   name="avatar"
+        <Upload  name="avatar"
         listType="picture-card"
         className="avatar-uploader"
-        showUploadList={false} onSuccess={this.handleChange} showUploadList={false}>
+        showUploadList={false} customRequest={this.customRequest} showUploadList={false}>
             {
               renderHtml
             } 

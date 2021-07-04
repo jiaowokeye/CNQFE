@@ -74,7 +74,7 @@ class DataPage extends React.Component {
     this.setState({
       loading: true
     })
-    Request('/psy/mini/mall/invoice/list', {
+    Request('/psy/mini/mall/invoice/mng/query', {
       k: this.state.k,
       offset: this.state.offset * this.state.count,
       count: this.state.count,
@@ -140,31 +140,15 @@ class DataPage extends React.Component {
 class EditUser extends React.Component{
   state = {
     "id":"",
-    "mobile":"",
-    "name":"",
-    "is_admin":false,
-    "id_number":"",
-    "email":"",
-    "avatar":"",
-    "gender":"1",
-    "available":false,
-    "visible":false
+    "visible":false,
+    'number':''
   }
   init(data:any){
-    if(data){
-      this.setState({
-        ...data,
-        ...{
-          "visible":true
-        }
-      })
-    }else{
-      this.setState({
-        ...{
-          "visible":true
-        }
-      })
-    }
+    this.setState({
+      "visible":true,
+      id:data.id,
+      'number':''
+    })
   }
   handleOk = ()=>{
     console.log(this.state);
@@ -172,29 +156,16 @@ class EditUser extends React.Component{
       ...this.state,
       ...{}
     }
-    let url = '/psy/sys/user/update';
-    if(this.state.id){
-      url = '/psy/sys/user/update';
-    }else{
-      delete params['id'];
-      url = '/psy/sys/user/add';
-    }
+    let url = '/psy/mini/mall/invoice/mng/issue';
     Request(url, params).then((res) => {
       this.handleCancel();
     })
   }
   handleCancel = ()=>{
     this.setState({
-      "visible":false,
       "id":"",
-      "mobile":"",
-      "name":"",
-      "is_admin":false,
-      "id_number":"",
-      "email":"",
-      "avatar":"",
-      "gender":"男",
-      "available":false,
+      "visible":false,
+      'number':''
     },()=>{
       this.props.callback&&this.props.callback();
     })
@@ -220,101 +191,81 @@ class EditUser extends React.Component{
       </div>
     );
     return  <Modal title={
-      this.state.id?'修改':'新增'
+      '填写开票信息'
     }
      visible={this.state.visible} 
      onOk={this.handleOk}
       onCancel={this.handleCancel}>
         <Form {...formItemLayout}>
-            <Form.Item label="头像">
-              <Upload
-                name="file"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="mini/mss/annex/upload"
-                onChange={(info)=>{
-                  console.log(info);
-                }}
-              >
-                {this.state.avatar ? <img src={this.state.avatar} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-              </Upload>
-            </Form.Item>
-            <Form.Item label="姓名">
-              <Input value={this.state.name} onChange={(e)=>{
+            <Form.Item label="发票号">
+              <Input value={this.state.number} onChange={(e)=>{
                 this.setState({
-                  name:e.target.value
+                  number:e.target.value
                 })
               }}/>
             </Form.Item>
-            <Form.Item label="手机号">
-              <Input value={this.state.mobile} onChange={(e)=>{
-                this.setState({
-                  mobile:e.target.value
-                })
-              }}/>
-            </Form.Item>
-            <Form.Item label="性别">
-              <Select value={this.state.gender} onChange={(value)=>{
-                this.setState({
-                  gender:value
-                })
-              }}>
-                <Option value="男">男</Option>
-                <Option value="女">女</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item label="管理员">
-              <div >
-                <Switch checked={this.state.is_admin} onChange={(checked)=>{
-                  console.log(checked);
-                  this.setState({
-                    is_admin:checked
-                  })
-                }} />
-              </div>
-             
-            </Form.Item>
+           
         </Form>
       </Modal>
   }
 }
 const columns = [
-  
   {
-    title: '姓名',
+    title: '订单类型',
+    dataIndex: 'target_type',
+    key: 'target_type',
+    render(str,record){
+      return str=='card'?'会员卡开票':'订单开票'
+    }
+  },
+  {
+    title: '金额（元）',
+    dataIndex: 'money',
+    key: 'money',
+    render(str,record){
+      return record['money']/100
+    }
+  },
+  {
+    title: '公司名称',
     dataIndex: 'name',
     key: 'name',
+    render(str,record){
+      return record['title']['company']
+    }
   },
   {
-    title: '金额',
-    dataIndex: 'mobile',
-    key: 'mobile',
+    title: '公司税号',
+    dataIndex: 'name',
+    key: 'name',
+    render(str,record){
+      return record['title']['account']
+    }
   },
-  // {
-  //   title: '性别',
-  //   dataIndex: 'gender',
-  //   key: 'gender',
-  // },
-  //   {
-  //     title: '操作',
-  //     dataIndex: 'scan',
-  //     key: 'scan',
-  //     width:"140px",
-  //     render:(str,record)=>{
-  //       return <div>
-  //          <span className="link" onClick={()=>container.refs.editUser.init(record)}>编辑</span>
-  //          <span className="link" onClick={()=>container.changeState(record)}>
-  //           {
-  //             record.available?'停用':'启用'
-  //           }
-
-  //          </span>
-          
+  {
+    title: '邮箱',
+    dataIndex: 'email',
+    key: 'email',
+  },
+  {
+    title: '状态',
+    dataIndex: 'state',
+    key: 'state',
+  },
+    {
+      title: '操作',
+      dataIndex: 'scan',
+      key: 'scan',
+      width:"140px",
+      render:(str,record)=>{
+        return <div>
+            {
+              record.state=='申请'?<span className="link" onClick={()=>container.refs.editUser.init(record)}>开具发票</span>:<span></span>
+            }
            
-  //       </div>
-  //     }
-  //   },
+        </div>
+      }
+    },
   ];
 
 export default DataPage;

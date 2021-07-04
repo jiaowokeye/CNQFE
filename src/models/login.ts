@@ -63,7 +63,7 @@ const Model: LoginModelType = {
           res = {
             status: 'ok',
             type:'account',
-            currentAuthority: 'admin',
+            currentAuthority: 'user',
           }
         }
         yield put({ 
@@ -71,6 +71,8 @@ const Model: LoginModelType = {
           payload: res,
         });
         window.location.href = '/#/admin/order';
+      }else{
+       
       }
     },
  
@@ -90,7 +92,7 @@ const Model: LoginModelType = {
     },
   },
 
-  reducers: {
+  reducers: { 
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
       return {

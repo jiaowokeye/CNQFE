@@ -85,6 +85,20 @@ const routes = [
             exact: true,
           },
           {
+            name: '会员卡销售记录',
+            path: '/admin/obligee',
+            authority: ['user', 'admin'],
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  component: () =>
+                    import(/* webpackChunkName: "p__admin__obligee" */ '../admin/obligee'),
+                  LoadingComponent: require('C:/Users/Administrator/Desktop/cnq-FE/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../admin/obligee').default,
+            exact: true,
+          },
+          {
             name: '退款管理',
             path: '/admin/refund',
             authority: ['user', 'admin'],
@@ -110,34 +124,6 @@ const routes = [
                     .default,
                 })
               : require('../admin/invoice').default,
-            exact: true,
-          },
-          {
-            name: '会员查询',
-            path: '/admin/memberQuery',
-            authority: ['user', 'admin'],
-            component: __IS_BROWSER
-              ? _dvaDynamic({
-                  component: () =>
-                    import(/* webpackChunkName: "p__admin__memberQuery" */ '../admin/memberQuery'),
-                  LoadingComponent: require('C:/Users/Administrator/Desktop/cnq-FE/src/components/PageLoading/index')
-                    .default,
-                })
-              : require('../admin/memberQuery').default,
-            exact: true,
-          },
-          {
-            name: '权利人查询',
-            path: '/admin/obligee',
-            authority: ['user', 'admin'],
-            component: __IS_BROWSER
-              ? _dvaDynamic({
-                  component: () =>
-                    import(/* webpackChunkName: "p__admin__obligee" */ '../admin/obligee'),
-                  LoadingComponent: require('C:/Users/Administrator/Desktop/cnq-FE/src/components/PageLoading/index')
-                    .default,
-                })
-              : require('../admin/obligee').default,
             exact: true,
           },
           {
