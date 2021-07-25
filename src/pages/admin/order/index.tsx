@@ -6,7 +6,7 @@ import 'braft-editor/dist/index.css';
 import { ArrowDownOutlined, ArrowUpOutlined, MinusOutlined,DeleteOutlined ,PlusOutlined ,EditOutlined} from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Modal, Input, Select, Row, Col, List,Radio , Tag, Radio,Descriptions,message,Upload,Switch ,Badge,Image  } from 'antd';
-import Request, { Delete, Get } from '@/utils/request'
+import Request, { Delete, Get,Download } from '@/utils/request'
 import UploadS from '@/components/Upload/ocrUp'
 import styles from './index.less';
 import bgPng from './bgPng.png';
@@ -106,7 +106,7 @@ class DataPage extends React.Component {
     })
   }
   export = ()=>{
-    Request('/psy/mng/bill/export', {
+    Download('/psy/mng/bill/export', {
       k: this.state.k,
       offset: this.state.offset * this.state.count,
       count: this.state.count,
@@ -245,12 +245,15 @@ class EditUser extends React.Component{
     Modal.confirm({
       title: '确认发起退款？',
       content: '',
+      cancelText:'取消',
+      okText:'确认',
       onOk() {
         Request('/psy/mng/refund/apply', {
           busi_type:'bill',
           busi_id:_this.state.data.id,
-          reason:this.state.message
+          reason:_this.state.message
          }).then((res) => {
+           message.success('发起退款成功');
            _this.setState({
              visible1:false
            },()=>{
@@ -278,12 +281,14 @@ class EditUser extends React.Component{
        overflowY:'auto'
      }}
      footer={<div>
-      
+       
         {
-           data!==null&&['normal','success'].indexOf(this.state.data['state'])!==-1&& <div className="ant-btn success_btn" onClick={()=>this.setState({
-            visible1:true,
-            message:''
-          })} style={{marginRight:'15px'}}>退款</div>
+           data!==null&&['normal','success'].indexOf(this.state.data['state'])!==-1&&(
+            this.state.data['refund_state']==''?<div className="ant-btn success_btn" onClick={()=>this.setState({
+              visible1:true,
+              message:''
+            })} style={{marginRight:'15px'}}>退款</div>:<div className="ant-btn error_btn" style={{marginRight:'15px'}}>{this.state.data['refund_state']}</div>
+           )
         }
       
        <div className="ant-btn error_btn" onClick={()=>this.handleCancel()}>关闭</div>
@@ -702,7 +707,7 @@ class AssigneeUpdate extends React.Component{
               <div>
                 <UploadS callback={(data,img)=>{
                   this.businesslicenseChange(data,img);
-                }} action="/psy/mini/ocr/businesslicense" renderHtml={
+                }} action="/ntz_dev/api/v1/mini/ocr/businesslicense" renderHtml={
                   this.state.as_ocr_id_img?<img className={styles.img1} src={this.state.as_ocr_id_img}/>:uploadButton
                 }/>
               </div>
@@ -731,12 +736,12 @@ class AssigneeUpdate extends React.Component{
               <div>
                 <UploadS callback={(data,img)=>{
                   this.businesslicenseChange1(data,img);
-                }} action="/psy/mini/ocr/idcard/face" renderHtml={
+                }} action="/ntz_dev/api/v1/mini/ocr/idcard/face" renderHtml={
                   this.state.as_idcard_face_ocr_id_img?<img className={styles.img1} src={this.state.as_idcard_face_ocr_id_img}/>:uploadButton1
                 }/>
                 <UploadS callback={(data,img)=>{
                   this.businesslicenseChange2(data,img);
-                }} action="/psy/mini/ocr/idcard/back" renderHtml={
+                }} action="/ntz_dev/api/v1/mini/ocr/idcard/back" renderHtml={
                   this.state.as_idcard_back_ocr_id_img?<img className={styles.img1} src={this.state.as_idcard_back_ocr_id_img}/>:uploadButton2
                 }/>
               </div>
@@ -938,6 +943,8 @@ class TrademarksUpdate extends React.Component{
     Modal.confirm({
       title: '确认删除？',
       content: '',
+      cancelText:'取消',
+      okText:'确认',
       onOk() {
         Request('/psy/mini/mall/bill/trademark/del', {
           tm_id:id
@@ -1143,7 +1150,7 @@ class AddTrademarks extends React.Component{
         <div>
           <UploadS callback={(data,img)=>{
             this.businesslicenseChange(data,img);
-          }} action="/psy/mini/ocr/trademark" renderHtml={
+          }} action="/ntz_dev/api/v1/mini/ocr/trademark" renderHtml={
             this.state.tm_ocr_id_img?<img className={styles.img1} src={this.state.tm_ocr_id_img}/>:uploadButton
           }/>
         </div>
@@ -1255,7 +1262,29 @@ const columns = [
         'canceled':'已取消',
         'stoped':'已终止'
       }
-      return <span>{stateObj[record.state]?stateObj[record.state]:record.state}</span>
+      const action_typeObj = {
+        0:record.notary_progress,
+        1:'待公证',
+        2:'待补充材料',
+        3:'待复活'
+      }
+      return <span>
+        {
+          record.state=='draft'?(!record.confirm?'去确认':'去支付'):''
+        }
+        {
+          record.state=='normal'?action_typeObj[record.action_type]:''
+        }
+       {
+          record.state=='success'?'已完成':''
+        }
+        {
+          record.state=='stoped'?'已终止':''
+        }
+          {
+          record.state=='canceled'?'已取消':''
+        }
+      </span>
     }
   },
     {

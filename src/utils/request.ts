@@ -113,13 +113,25 @@ const requestion= (config={}) =>{
     return service(config)
 }
 export default  function Request(url:string, data:any) {
-  return requestion({
-      url: url,
-      method: 'post',
-      data: data
-  })
+    let params = {
+        url: url,
+        method: 'post',
+        data: data,
+        
+    }
+ 
+  return requestion(params)
 };
-
+export  function Download(url:string, data:any) {
+    let params = {
+        url: url,
+        method: 'post',
+        data: data,
+        responseType:'blob',
+    }
+   
+  return requestion(params)
+};
 export function Get(url:string, data:any) {
     return requestion({
         url: url,
@@ -167,6 +179,7 @@ const  MostRequest = {
     Get:Get,
     Post:Post,
     Put:Put,
+    Download:Download,
     Delete:Delete,
     FormDataSubmit:FormDataSubmit
 }
@@ -204,7 +217,7 @@ export function All(optionArr:any) {
 //     })
 // }
 function convertRes2Blob(response) {
-    console.log(123);
+    console.log(response);
     // 提取文件名
     let fileName = response.headers['content-disposition'].match(
       /filename=(.*)/
@@ -217,7 +230,7 @@ function convertRes2Blob(response) {
     const blob = new Blob([response.data], {  type: type })
     
     if ('msSaveOrOpenBlob' in navigator) {
-         
+            
           window.navigator.msSaveOrOpenBlob(blob, fileName);
         } else {
           

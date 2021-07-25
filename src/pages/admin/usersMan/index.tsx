@@ -130,7 +130,7 @@ class DataPage extends React.Component {
             showSizeChanger:false
             }} loading={this.state.loading} dataSource={this.state.list} columns={columns} />
       </div>
-
+      <Resetpwd ref="resetpwd" callback={()=>this.getList()}/>
       <EditUser ref="editUser" callback={()=>this.getList()}/>
     </div>
   }
@@ -146,6 +146,7 @@ class EditUser extends React.Component{
     "is_admin":false,
     "id_number":"",
     "email":"",
+    "pwd":'',
     "avatar":"",
     "gender":"1",
     "available":false,
@@ -189,6 +190,7 @@ class EditUser extends React.Component{
       "visible":false,
       "id":"",
       "mobile":"",
+      "pwd":'',
       "name":"",
       "is_admin":false,
       "id_number":"",
@@ -251,6 +253,15 @@ class EditUser extends React.Component{
                 })
               }}/>
             </Form.Item>
+            {
+              !this.state.id&&<Form.Item label="密码">
+              <Input value={this.state.pwd} onChange={(e)=>{
+                this.setState({
+                  pwd:e.target.value
+                })
+              }}/>
+            </Form.Item>
+            }
             <Form.Item label="性别">
               <Select value={this.state.gender} onChange={(value)=>{
                 this.setState({
@@ -276,6 +287,81 @@ class EditUser extends React.Component{
       </Modal>
   }
 }
+
+class Resetpwd extends React.Component{
+  state = {
+    visible:false,
+    npwd:'',
+    spwd:'',
+    id:'',
+  }
+  init(id:any){
+    this.setState({
+      visible:true,
+      npwd:'',
+      spwd:'',
+      id:id,
+    })
+  }
+  handleOk = ()=>{
+    if(this.state.spwd!=this.state.npwd){
+      message.error('两次输入的密码不一致');
+      return;
+    }
+    Request('/psy/sys/user/resetpwd', {
+      pwd:this.state.npwd,
+      id:this.state.id
+    }).then((res) => {
+      this.setState({
+        visible:false,
+        pwd:'',
+        npwd:'',
+        spwd:''
+      },()=>{
+        this.props.callback&&this.props.callback();
+      })
+    })
+  }
+  render(){
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 19 },
+      },
+    };
+    return <Modal title='修改密码'
+    visible={this.state.visible} 
+     onOk={this.handleOk}
+     onCancel={()=>{
+       this.setState({
+         visible:false,
+         pwd:'',
+         npwd:''
+       })
+     }}>
+       <Form {...formItemLayout}>
+           <Form.Item label="新密码">
+             <Input value={this.state.npwd} onChange={(e)=>{
+               this.setState({
+                 npwd:e.target.value
+               })
+             }}/>
+           </Form.Item>
+           <Form.Item label="确认密码">
+             <Input value={this.state.spwd} onChange={(e)=>{
+               this.setState({
+                 spwd:e.target.value
+               })
+             }}/>
+           </Form.Item>
+       </Form>
+     </Modal>
+  }
+}
 const columns = [
   
   {
@@ -297,10 +383,11 @@ const columns = [
       title: '操作',
       dataIndex: 'scan',
       key: 'scan',
-      width:"140px",
+      width:"180px",
       render:(str,record)=>{
         return <div>
            <span className="link" onClick={()=>container.refs.editUser.init(record)}>编辑</span>
+           <span className="link" onClick={()=>container.refs.resetpwd.init(record.id)}>重置密码</span>
            <span className="link" onClick={()=>container.changeState(record)}>
             {
               record.available?'停用':'启用'

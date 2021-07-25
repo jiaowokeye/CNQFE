@@ -61,6 +61,8 @@ class DataPage extends React.Component {
     Modal.confirm({
       title: '确认删除？',
       content: '删除后，会员卡将消失',
+      cancelText:'取消',
+      okText:'确认',
       onOk() {
         Request('/psy/mng/card/del', {
           id:id

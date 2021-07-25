@@ -78,9 +78,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const Rightmenu = ()=>{
       return <Menu className="headRightMenu">
         <Menu.Item>
-          <Link to={''}>
-            {userInfo.name} 
-          </Link>
+        {userInfo.name} 
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item>

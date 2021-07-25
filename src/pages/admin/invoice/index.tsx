@@ -243,6 +243,30 @@ const columns = [
     }
   },
   {
+    title: '公司地址',
+    dataIndex: 'name',
+    key: 'name',
+    render(str,record){
+      return record['title']['address']
+    }
+  },
+  {
+    title: '开户银行',
+    dataIndex: 'name',
+    key: 'name',
+    render(str,record){
+      return record['title']['bank']
+    }
+  },
+  {
+    title: '银行账户',
+    dataIndex: 'name',
+    key: 'name',
+    render(str,record){
+      return record['title']['tax_no']
+    }
+  },
+  {
     title: '邮箱',
     dataIndex: 'email',
     key: 'email',

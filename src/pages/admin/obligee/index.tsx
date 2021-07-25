@@ -113,6 +113,8 @@ class DataPage extends React.Component {
     let _this = this;
     Modal.confirm({
       title: '确认发起退款？',
+      cancelText:'取消',
+      okText:'确认',
       content: '',
       onOk() {
         Request('/psy/mng/refund/apply', {

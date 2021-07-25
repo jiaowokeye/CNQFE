@@ -6,7 +6,7 @@ import 'braft-editor/dist/index.css';
 import { ArrowDownOutlined, ArrowUpOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Modal, Input, Select, Row, Col, List, Tag, Radio,Descriptions,message,Upload,Switch } from 'antd';
-import Request, { Delete, Get } from '@/utils/request'
+import Request, { Delete, Get ,Download} from '@/utils/request'
 import UploadS from '@/components/Upload/index'
 import styles from './index.less';
 import bgPng from './bgPng.png';
@@ -100,7 +100,7 @@ class DataPage extends React.Component {
     })
   }
   export = ()=>{
-    Request('/psy/mng/refund/export', {
+    Download('/psy/mng/refund/export', {
       k: this.state.k,
       offset: this.state.offset * this.state.count,
       count: this.state.count,
@@ -249,7 +249,7 @@ const columns = [
     key: 'apply_time',
     render(str,record){
       return <div>
-        {moment(record.apply_time).format('YYYY-MM-DD')}
+        {moment(record.apply_time).format('YYYY-MM-DD HH:mm:ss')}
       </div>
     }
   },
@@ -259,7 +259,7 @@ const columns = [
     key: 'check_time',
     render(str,record){
       return <div>
-        {record.check_time!=0?moment(record.check_time).format('YYYY-MM-DD'):''}
+        {record.check_time!=0?moment(record.check_time).format('YYYY-MM-DD HH:mm:ss'):''}
       </div>
     }
   },

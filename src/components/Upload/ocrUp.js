@@ -38,6 +38,7 @@ class UploadS extends React.Component{
   } 
  
   handleChange = (info)=>{
+    console.log(info);
     this.props.callback&&this.props.callback(info.data,this.imageUrl);
   } 
 
@@ -52,7 +53,7 @@ class UploadS extends React.Component{
     
     return (
       <div className='upload_box'>
-        <Upload  onChange={this.handleChange1}  action={this.props.action}  name="file"
+        <Upload  onChange={this.handleChange1} withCredentials={true}  action={this.props.action}  name="file"
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false} onSuccess={this.handleChange} showUploadList={false}>
